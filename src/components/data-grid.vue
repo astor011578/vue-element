@@ -1,7 +1,7 @@
 <template>
   <boolean-searcher @get-search-filter="getSearchFilter" />
   <column-visibility
-    v-for="col in tableColumns"
+    v-for="col in tableColumns.filter((col) => col.prop !== 'index')"
     :key="`column-visibility-${col.prop}`"
     :table-column="col"
     @get-column-visibility="getColumnVisibility"
@@ -17,14 +17,14 @@
 
 <script setup lang="ts">
 import type { PaginationInfo, QueryResult, SearchFilter, TableColumn } from "@/components/data-grid/types";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import BooleanSearcher from "@/components/data-grid/boolean-searcher.vue";
 import ColumnVisibility from "@/components/data-grid/column-visibility.vue";
 import DataTable from "@/components/data-grid/data-table.vue";
 
 const triggerToRedraw = ref(0);
-let searchFilter = reactive({});
-let tableColumns = reactive<TableColumn[]>([]);
+let searchFilter = ref({});
+let tableColumns = ref<TableColumn[]>([]);
 const props = defineProps<{
   columns: TableColumn[];
   pageSize: number;
@@ -32,8 +32,8 @@ const props = defineProps<{
 }>();
 
 function getColumnVisibility(colPropName: string, colVisible: boolean) {
-  tableColumns = [
-    ...tableColumns.map((col) => {
+  tableColumns.value = [
+    ...tableColumns.value.map((col) => {
       const newCol = Object.assign({}, col);
       newCol.visible = col.prop === colPropName ? colVisible : col.visible;
       return newCol;
@@ -42,13 +42,13 @@ function getColumnVisibility(colPropName: string, colVisible: boolean) {
   triggerToRedraw.value++;
 }
 
-function getSearchFilter(filter: Object) {
-  searchFilter = Object.assign({}, filter);
+function getSearchFilter(filter: SearchFilter) {
+  searchFilter.value = Object.assign({}, filter);
   triggerToRedraw.value++;
 }
 
 onMounted(() => {
-  tableColumns = [...props.columns];
+  tableColumns.value = [...props.columns];
 });
 </script>
 

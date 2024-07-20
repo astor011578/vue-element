@@ -9,10 +9,9 @@
     <el-table-column
       v-for="(col, index) in showColumns"
       :key="`data-table-${index}`"
-      :type="col?.type"
       :prop="col?.prop"
       :label="col.label"
-      :min-width="col?.minWidth ? col.minWidth : 50"
+      :min-width="col?.minWidth ? col.minWidth : 100"
       :width="col?.width ? col.width : 80"
       :sortable="col?.sortable ? col.sortable : true"
       :resizable="col?.resizable ? col.resizable : true"
@@ -26,10 +25,10 @@
       >
       </template>
       <template
-        #default="{ row, $index }"
+        #default="{ row }"
         v-else
       >
-        {{ row[col.prop] ? row[col.prop] : $index }}
+        {{ row[col.prop] }}
       </template>
     </el-table-column>
   </el-table>
@@ -45,7 +44,6 @@
       layout="prev, pager, next"
       :page-size="pageInfo.pageSize"
       :total="pageInfo.dataCount"
-      :current-page="pageInfo.currPage"
       @current-change="changePageHandler"
     />
   </span>
@@ -53,7 +51,7 @@
 
 <script setup lang="ts">
 import type { TableDataItem, TableColumn, PaginationInfo, QueryResult, SearchFilter } from "@/components/data-grid/types";
-import { computed, watch, reactive } from "vue";
+import { computed, watch, ref, onMounted } from "vue";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 
 const props = defineProps<{
@@ -65,23 +63,24 @@ const props = defineProps<{
 }>();
 
 const showColumns = computed<TableColumn[]>(() => props.tableColumns.filter((col) => col.visible));
-const showData = computed<TableDataItem[]>(() => [...queryResult.data]);
+const showData = computed<TableDataItem[]>(() => [...queryResult.value.data]);
 
+const currPage = ref<number>(1);
 const pageInfo = computed<PaginationInfo>(() => {
   return {
-    dataCount: queryResult.totalCount,
+    dataCount: queryResult.value.totalCount,
     pageSize: props.pageSize,
     pageCount: 0,
-    currPage: 0
+    currPage: currPage.value
   };
 });
 
-function changePageHandler(currPage: number) {
-  pageInfo.value.currPage = currPage;
+function changePageHandler(_currPage: number) {
+  currPage.value = _currPage;
   redraw();
 }
 
-let queryResult = reactive<QueryResult>({
+const queryResult = ref<QueryResult>({
   pageSize: 0,
   currPage: 0,
   totalCount: 0,
@@ -95,8 +94,12 @@ watch(triggerToRedraw, () => {
 
 function redraw() {
   const result = props.queryDataFn(pageInfo.value, props?.searchFilter);
-  queryResult = result;
+  queryResult.value = Object.assign({}, result);
 }
+
+onMounted(() => {
+  redraw();
+});
 </script>
 
 <style scoped></style>
