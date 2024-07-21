@@ -1,4 +1,5 @@
 import type { TableDataItem, TableColumn, PaginationInfo, SearchFilter, QueryResult } from "@/components/data-grid/types";
+import { VNode, h } from "vue";
 
 export class dataTableService {
   /**
@@ -19,7 +20,7 @@ export class dataTableService {
         width: 180,
         visible: true,
         disabled: false,
-        isHTML: true
+        render: renderUrgentLevel
       },
       {
         prop: "date",
@@ -60,23 +61,18 @@ export class dataTableService {
    */
   static getPageData(pageInfo: PaginationInfo, searchFilter?: SearchFilter): QueryResult {
     const fetchResult = getFakeData(17, pageInfo, searchFilter);
-    const { totalCount, currPage, pageSize, data } = fetchResult;
-    const modifiedData = data.map((item) => {
-      const modifiedItem = Object.assign({}, item);
-      //針對 "緊急案件" 做紅字樣式處理
-      const { urgentLevel, urgentLevelId } = item;
-      const urgentLevelClass = urgentLevelId === 2 ? "text-red-500" : "";
-      modifiedItem.urgentLevel = `<text class="${urgentLevelClass}">${urgentLevel}</text>`;
-      return modifiedItem;
-    });
-
-    return {
-      totalCount,
-      currPage,
-      pageSize,
-      data: modifiedData
-    };
+    return fetchResult;
   }
+}
+
+/**
+ * @description urgentLevel 的渲染函數
+ */
+function renderUrgentLevel(scope: any): VNode {
+  const { urgentLevel, urgentLevelId } = scope.row;
+  const urgentLevelClass = urgentLevelId === 2 ? "text-red-500" : "";
+
+  return h("text", { class: urgentLevelClass }, urgentLevel);
 }
 
 /**

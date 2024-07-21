@@ -1,3 +1,4 @@
+import { VNode } from "vue";
 import { ElTableColumn } from "element-plus";
 
 export type TableDataItem = Record<string, any>;
@@ -15,7 +16,7 @@ export type TableColumn = {
   headerAlign?: (typeof ElTableColumn)["headerAlign"];
   showOverflowTooltip?: (typeof ElTableColumn)["showOverflowTooltip"];
   formatter?: (typeof ElTableColumn)["formatter"];
-  isHTML?: boolean; //是否為 HTML string, 如果是則會被放進 ElTableColumn 的 #default slot 中
+  render?: (scope: any) => VNode; //是否有渲染函數
 };
 
 export type PaginationInfo = {

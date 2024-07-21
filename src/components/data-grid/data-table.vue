@@ -18,14 +18,12 @@
       :show-overflow-tooltip="col?.showOverflowTooltip ? col.showOverflowTooltip : true"
       :formatter="col?.formatter ? col.formatter : null"
     >
-      <template #default="{ row }">
-        <span
-          v-if="col.isHTML"
-          v-html="row[col.prop]"
-        ></span>
-        <span v-else>
-          {{ row[col.prop] }}
-        </span>
+      <template #default="scope">
+        <text v-if="!col.render">{{ scope.row[col.prop] }}</text>
+        <component
+          v-else
+          :is="col.render(scope)"
+        ></component>
       </template>
     </el-table-column>
   </el-table>
