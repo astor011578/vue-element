@@ -10,6 +10,16 @@ export class dataTableService {
         visible: true
       },
       {
+        prop: "urgentLevel",
+        label: "Urgent Level",
+        width: 180,
+        visible: true,
+        disabled: false
+      },
+      {
+        prop: "urgentLevelId"
+      },
+      {
         prop: "date",
         label: "Date",
         width: "180",

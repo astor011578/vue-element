@@ -101,5 +101,3 @@ onMounted(() => {
   redraw();
 });
 </script>
-
-<style scoped></style>

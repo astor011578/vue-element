@@ -7,5 +7,3 @@ import { ref } from "vue";
 
 const text = ref("Boolean Searcher");
 </script>
-
-<style scoped></style>

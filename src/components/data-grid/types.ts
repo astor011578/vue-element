@@ -5,7 +5,7 @@ export type TableDataItem = Record<string, any>;
 export type TableColumn = {
   visible?: boolean; //是否要顯示此欄位
   disabled?: boolean; //是否可以變更此欄位勾選框的值
-  label: (typeof ElTableColumn)["lable"];
+  label?: (typeof ElTableColumn)["lable"];
   prop?: (typeof ElTableColumn)["prop"];
   width?: (typeof ElTableColumn)["width"];
   minWidth?: (typeof ElTableColumn)["minWidth"];

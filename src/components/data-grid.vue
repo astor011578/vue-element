@@ -23,8 +23,8 @@ import ColumnVisibility from "@/components/data-grid/column-visibility.vue";
 import DataTable from "@/components/data-grid/data-table.vue";
 
 const triggerToRedraw = ref(0);
-let searchFilter = ref({});
-let tableColumns = ref<TableColumn[]>([]);
+const searchFilter = ref({});
+const tableColumns = ref<TableColumn[]>([]);
 const props = defineProps<{
   columns: TableColumn[];
   pageSize: number;
@@ -51,5 +51,3 @@ onMounted(() => {
   tableColumns.value = [...props.columns];
 });
 </script>
-
-<style scoped></style>
