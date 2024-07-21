@@ -18,24 +18,21 @@
       :show-overflow-tooltip="col?.showOverflowTooltip ? col.showOverflowTooltip : true"
       :formatter="col?.formatter ? col.formatter : null"
     >
-      <template
-        #default
-        v-if="col.slotContent"
-        v-html="col?.slotContent"
-      >
-      </template>
-      <template
-        #default="{ row }"
-        v-else
-      >
-        {{ row[col.prop] }}
+      <template #default="{ row }">
+        <span
+          v-if="col.isHTML"
+          v-html="row[col.prop]"
+        ></span>
+        <span v-else>
+          {{ row[col.prop] }}
+        </span>
       </template>
     </el-table-column>
   </el-table>
   <span>
     <span>
       <text> 總共找到 {{ pageInfo.dataCount }} 筆資料， </text>
-      <text> 目前顯示第 {{ pageInfo.currPage * pageInfo.pageSize }} ~ {{ (pageInfo.currPage + 1) * pageInfo.pageSize }} 筆資料。 </text>
+      <text> 目前顯示第 {{ (pageInfo.currPage - 1) * pageInfo.pageSize }} ~ {{ pageInfo.currPage * pageInfo.pageSize }} 筆資料。 </text>
     </span>
     <el-pagination
       class="mt-4"
@@ -101,3 +98,9 @@ onMounted(() => {
   redraw();
 });
 </script>
+
+<style lang="css" scoped>
+:deep(.text-red-500) {
+  color: rgb(239 68 68);
+}
+</style>

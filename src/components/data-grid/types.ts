@@ -15,7 +15,7 @@ export type TableColumn = {
   headerAlign?: (typeof ElTableColumn)["headerAlign"];
   showOverflowTooltip?: (typeof ElTableColumn)["showOverflowTooltip"];
   formatter?: (typeof ElTableColumn)["formatter"];
-  slotContent?: string; //要放進 ElTableColumn 的 #default slot 中的內容
+  isHTML?: boolean; //是否為 HTML string, 如果是則會被放進 ElTableColumn 的 #default slot 中
 };
 
 export type PaginationInfo = {

@@ -13,5 +13,5 @@ import { dataTableService } from "@/service/data-table-service";
 import DataGrid from "@/components/data-grid.vue";
 
 const allColumns = computed<TableColumn[]>(() => dataTableService.getAllColumns());
-const pageSize = ref(20);
+const pageSize = ref(10);
 </script>
