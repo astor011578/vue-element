@@ -6,7 +6,7 @@ export type TableDataItem = Record<string, any>;
 export type TableColumn = {
   visible?: boolean; //是否要顯示此欄位
   disabled?: boolean; //是否可以變更此欄位勾選框的值
-  label?: (typeof ElTableColumn)["lable"];
+  label?: (typeof ElTableColumn)["label"];
   prop?: (typeof ElTableColumn)["prop"];
   width?: (typeof ElTableColumn)["width"];
   minWidth?: (typeof ElTableColumn)["minWidth"];
@@ -15,8 +15,8 @@ export type TableColumn = {
   align?: (typeof ElTableColumn)["align"];
   headerAlign?: (typeof ElTableColumn)["headerAlign"];
   showOverflowTooltip?: (typeof ElTableColumn)["showOverflowTooltip"];
+  className?: (typeof ElTableColumn)["className"];
   formatter?: (typeof ElTableColumn)["formatter"];
-  render?: (scope: any) => VNode; //是否有渲染函數
 };
 
 export type PaginationInfo = {

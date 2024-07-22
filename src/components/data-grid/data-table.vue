@@ -4,6 +4,7 @@
     border
     stripe
     fit
+    show-overflow-tooltip
     style="width: 100%"
   >
     <el-table-column
@@ -16,16 +17,8 @@
       :sortable="col?.sortable ? col.sortable : true"
       :resizable="col?.resizable ? col.resizable : true"
       :show-overflow-tooltip="col?.showOverflowTooltip ? col.showOverflowTooltip : true"
-      :formatter="col?.formatter ? col.formatter : null"
-    >
-      <template #default="scope">
-        <text v-if="!col.render">{{ scope.row[col.prop] }}</text>
-        <component
-          v-else
-          :is="col.render(scope)"
-        ></component>
-      </template>
-    </el-table-column>
+      :formatter="col?.formatter ? col.formatter : (row, column, cellValue) => { return cellValue }"
+    />
   </el-table>
   <span>
     <span>

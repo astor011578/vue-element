@@ -20,7 +20,7 @@ export class dataTableService {
         width: 180,
         visible: true,
         disabled: false,
-        render: renderUrgentLevel
+        formatter: renderUrgentLevel
       },
       {
         prop: "date",
@@ -68,8 +68,8 @@ export class dataTableService {
 /**
  * @description urgentLevel 的渲染函數
  */
-function renderUrgentLevel(scope: any): VNode {
-  const { urgentLevel, urgentLevelId } = scope.row;
+function renderUrgentLevel(row: any, column: any, cellValue: any, index: number): VNode {
+  const { urgentLevel, urgentLevelId } = row;
   const urgentLevelClass = urgentLevelId === 2 ? "text-red-500" : "";
 
   return h("text", { class: urgentLevelClass }, urgentLevel);
