@@ -1,4 +1,3 @@
-import { VNode } from "vue";
 import { ElTableColumn } from "element-plus";
 
 export type TableDataItem = Record<string, any>;
