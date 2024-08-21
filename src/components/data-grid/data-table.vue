@@ -1,46 +1,56 @@
 <template>
-  <el-table
-    :data="showData"
-    border
-    stripe
-    fit
-    show-overflow-tooltip
-    style="width: 100%"
-  >
-    <el-table-column
-      v-for="(col, index) in showColumns"
-      :key="`data-table-${index}`"
-      :prop="col?.prop"
-      :label="col.label"
-      :min-width="col?.minWidth ? col.minWidth : 100"
-      :width="col?.width ? col.width : 80"
-      :sortable="col?.sortable ? col.sortable : true"
-      :resizable="col?.resizable ? col.resizable : true"
-      :show-overflow-tooltip="col?.showOverflowTooltip ? col.showOverflowTooltip : true"
-      :formatter="col?.formatter ? col.formatter : (row, column, cellValue) => { return cellValue }"
-    />
-  </el-table>
   <span>
+    <el-table
+      ref="tableRef"
+      :data="showData"
+      border
+      stripe
+      fit
+      show-overflow-tooltip
+      style="width: 100%"
+    >
+      <el-table-column type="selection"> {{}} </el-table-column>
+      <el-table-column
+        v-for="(col, index) in showColumns"
+        :key="`data-table-${index}`"
+        :prop="col?.prop"
+        :label="col.label"
+        :min-width="col?.minWidth ? col.minWidth : 100"
+        :width="col?.width ? col.width : 80"
+        :sortable="col?.sortable ? col.sortable : true"
+        :resizable="col?.resizable ? col.resizable : true"
+        :show-overflow-tooltip="col?.showOverflowTooltip ? col.showOverflowTooltip : true"
+        :formatter="
+          col?.formatter
+            ? col.formatter
+            : (row, column, cellValue) => {
+                return cellValue;
+              }
+        "
+      />
+    </el-table>
     <span>
-      <text> 總共找到 {{ pageInfo.dataCount }} 筆資料， </text>
-      <text> 目前顯示第 {{ (pageInfo.currPage - 1) * pageInfo.pageSize }} ~ {{ pageInfo.currPage * pageInfo.pageSize }} 筆資料。 </text>
+      <span>
+        <text> 總共找到 {{ pageInfo.dataCount }} 筆資料， </text>
+        <text> 目前顯示第 {{ (pageInfo.currPage - 1) * pageInfo.pageSize }} ~ {{ pageInfo.currPage * pageInfo.pageSize }} 筆資料。 </text>
+      </span>
+      <el-pagination
+        class="mt-4"
+        size="small"
+        background
+        layout="prev, pager, next"
+        :page-size="pageInfo.pageSize"
+        :total="pageInfo.dataCount"
+        @current-change="changePageHandler"
+      />
     </span>
-    <el-pagination
-      class="mt-4"
-      size="small"
-      background
-      layout="prev, pager, next"
-      :page-size="pageInfo.pageSize"
-      :total="pageInfo.dataCount"
-      @current-change="changePageHandler"
-    />
   </span>
 </template>
 
 <script setup lang="ts">
 import type { TableDataItem, TableColumn, PaginationInfo, QueryResult, SearchFilter } from "@/components/data-grid/types";
 import { computed, watch, ref, onMounted } from "vue";
-import { ElTable, ElTableColumn, ElPagination } from "element-plus";
+import { ElTable, ElTableColumn, ElPagination, TableInstance } from "element-plus";
 
 const props = defineProps<{
   tableColumns: TableColumn[];
@@ -50,6 +60,7 @@ const props = defineProps<{
   triggerToRedraw: number;
 }>();
 
+const tableRef = ref<TableInstance>();
 const showColumns = computed<TableColumn[]>(() => props.tableColumns.filter((col) => col.visible));
 const showData = computed<TableDataItem[]>(() => [...queryResult.value.data]);
 
